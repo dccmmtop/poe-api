@@ -1,16 +1,28 @@
 import poe
 import logging
-import sys
+import json
 
-#send a message and immediately delete it
+from bottle import route, run, request, response
 
-token = sys.argv[1]
+@route('/api/v1/ask', method = 'POST')
+def login():
+    q = request.json.get('q')
+    response.content_type = 'application/json'
+    result = {
+      'result':'OK',
+      'data': ask(q)
+    }
+    return json.dumps(result)
+
+def ask(message):
+    answer = ""
+    for chunk in client.send_message("capybara", message, with_chat_break=True):
+      answer = answer+ chunk["text_new"]
+    return answer
+    # client.purge_conversation("capybara", count=3)
+
+token = "Sd1cy17-57VEULwc19wcDw=="
 poe.logger.setLevel(logging.INFO)
-client = poe.Client(token)
+client = poe.Client(token,proxy="socks5://127.0.0.1:7890")
+run(host='localhost', port=8080)
 
-message = "Who are you?"
-for chunk in client.send_message("capybara", message, with_chat_break=True):
-  print(chunk["text_new"], end="", flush=True)
-
-#delete the 3 latest messages, including the chat break
-client.purge_conversation("capybara", count=3)
