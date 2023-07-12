@@ -395,7 +395,7 @@ class Client:
 
     self.ws.run_forever(**kwargs)
 
-  def connect_ws(self, timeout=5):
+  def connect_ws(self, timeout=60):
     if self.ws_connected:
       return
 
@@ -498,7 +498,7 @@ class Client:
       self.disconnect_ws()
       self.connect_ws()
 
-  def send_message(self, chatbot, message, with_chat_break=False, timeout=20, async_recv=True, suggest_callback=None):
+  def send_message(self, chatbot, message, with_chat_break=False, timeout=60, async_recv=True, suggest_callback=None):
     # if there is another active message, wait until it has finished sending
     timer = 0
     while None in self.active_messages.values():
