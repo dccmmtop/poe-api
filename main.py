@@ -1,6 +1,7 @@
 import logging
 import json
 
+import os
 from bottle import route, run, request, response
 from .poe.src import poe
 
@@ -21,7 +22,8 @@ def ask(message):
     return answer
     # client.purge_conversation("capybara", count=3)
 
-token = "Sd1cy17-57VEULwc19wcDw=="
+token = os.environ.get('poe_token')
 poe.logger.setLevel(logging.INFO)
 client = poe.Client(token,proxy="socks5://127.0.0.1:7890")
 run(host='localhost', port=8080)
+
